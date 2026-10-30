@@ -102,7 +102,7 @@ export default function ConversationList({
 
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center justify-between gap-2">
-                    <span className="truncate  text-xl font-semibold text-gray-900">
+                    <span className="truncate  text-lg font-semibold text-gray-900">
                       {conversation.name}
                     </span>
 

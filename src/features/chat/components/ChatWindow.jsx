@@ -60,7 +60,7 @@ export default function ChatWindow({
           </div>
 
           <div className="min-w-0">
-            <h2 className="truncate text-base font-semibold text-gray-900">
+            <h2 className="truncate text-lg font-semibold text-gray-900">
               {conversation.name}
             </h2>
 
@@ -113,7 +113,9 @@ export default function ChatWindow({
           </div>
 
           <div className="min-w-0">
-            <p className="text-base font-semibold text-gray-800">AI Auto-Reply</p>
+            <p className="text-base font-semibold text-gray-800">
+              AI Auto-Reply
+            </p>
 
             <p aria-live="polite" className="text-sm text-gray-500">
               {aiEnabled ? "Automatic replies enabled" : "Replies are manual"}
@@ -122,30 +124,30 @@ export default function ChatWindow({
         </div>
 
         <div className="flex items-center gap-2">
-            <button
-          type="button"
-          role="switch"
-          aria-checked={aiEnabled}
-          aria-label={`${aiEnabled ? "Disable" : "Enable"} AI auto-reply`}
-          onClick={onToggleAI}
-          className={`relative flex h-7 w-12 shrink-0 items-center justify-between rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
-            aiEnabled ? "bg-indigo-600" : "bg-gray-300"
-          }`}
-        >
-          <span
-            className={`h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
-              aiEnabled ? "translate-x-6" : "translate-x-1"
+          <button
+            type="button"
+            role="switch"
+            aria-checked={aiEnabled}
+            aria-label={`${aiEnabled ? "Disable" : "Enable"} AI auto-reply`}
+            onClick={onToggleAI}
+            className={`relative flex h-7 w-12 shrink-0 items-center justify-between rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+              aiEnabled ? "bg-indigo-600" : "bg-gray-300"
             }`}
-          />
-        </button>
-        <span
-          aria-hidden="true"
-          className={`min-w-7  font-bold text-md ${
-            aiEnabled ? "text-indigo-700" : "text-gray-500"
-          }`}
-        >
-          {aiEnabled ? "On" : "Off"}
-        </span>
+          >
+            <span
+              className={`h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
+                aiEnabled ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+          <span
+            aria-hidden="true"
+            className={`min-w-7  font-bold text-md ${
+              aiEnabled ? "text-indigo-700" : "text-gray-500"
+            }`}
+          >
+            {aiEnabled ? "On" : "Off"}
+          </span>
         </div>
       </div>
 

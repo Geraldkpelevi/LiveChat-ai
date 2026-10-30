@@ -83,7 +83,7 @@ export default function Sidebar({
               title={collapsed ? item.label : undefined}
               aria-label={item.label}
               className={({ isActive }) =>
-                `flex w-full min-w-0 items-center gap-3 rounded-xl px-3 py-3 text-base font-medium transition ${
+                `flex w-full min-w-0 items-center gap-3 rounded-xl px-3 py-3 text-lg font-medium transition ${
                   collapsed ? "justify-center" : ""
                 } ${
                   isActive
