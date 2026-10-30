@@ -21,7 +21,7 @@ export default function Contacts() {
     <section className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-col">
       <header className="mb-4 flex flex-wrap items-end justify-between gap-3 sm:mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+          <h1 className="text-2xl font-bold text-gray-900">
             Contacts
           </h1>
           <p className="mt-1 text-sm text-gray-500">
@@ -42,14 +42,14 @@ export default function Contacts() {
           onChange={(event) => setSearchQuery(event.target.value)}
           placeholder="Search name, email, or phone..."
           aria-label="Search contacts"
-          className="h-11 min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400"
+          className="h-11 min-w-0 flex-1 bg-transparent text-base text-gray-800 outline-none placeholder:text-gray-400"
         />
       </label>
 
       {filteredContacts.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 bg-white px-5 py-12 text-center">
           <Users size={30} className="mb-3 text-gray-300" />
-          <h2 className="text-sm font-semibold text-gray-800">
+          <h2 className="text-base font-semibold text-gray-800">
             No contacts found
           </h2>
           <p className="mt-1 text-sm text-gray-500">
@@ -84,7 +84,7 @@ export default function Contacts() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center gap-2">
-                    <h2 className="truncate text-sm font-semibold text-gray-900">
+                    <h2 className="truncate text-base font-semibold text-gray-900">
                       {contact.name}
                     </h2>
                     {contact.isPinned && (
@@ -93,7 +93,7 @@ export default function Contacts() {
                       </span>
                     )}
                   </div>
-                  <p className="mt-1 text-xs capitalize text-gray-500">
+                  <p className="mt-1 text-sm capitalize text-gray-500">
                     {contact.status}
                   </p>
                 </div>
@@ -108,7 +108,7 @@ export default function Contacts() {
                 )}
               </div>
 
-              <p className="mt-4 line-clamp-2 min-h-10 text-sm leading-5 text-gray-600">
+              <p className="mt-4 line-clamp-2 min-h-10 text-base leading-6 text-gray-600">
                 {contact.lastMessage}
               </p>
               <p className="mt-1 text-xs text-gray-400">
@@ -118,14 +118,14 @@ export default function Contacts() {
               <div className="mt-4 flex min-w-0 flex-col gap-2 border-t border-gray-100 pt-3">
                 <a
                   href={`mailto:${contact.email}`}
-                  className="flex min-w-0 items-center gap-2 text-xs text-gray-500 hover:text-indigo-600"
+                  className="flex min-w-0 items-center gap-2 text-sm text-gray-500 hover:text-indigo-600"
                 >
                   <Mail size={14} className="shrink-0" />
                   <span className="truncate">{contact.email}</span>
                 </a>
                 <a
                   href={`tel:${contact.phone}`}
-                  className="flex min-w-0 items-center gap-2 text-xs text-gray-500 hover:text-indigo-600"
+                  className="flex min-w-0 items-center gap-2 text-sm text-gray-500 hover:text-indigo-600"
                 >
                   <Phone size={14} className="shrink-0" />
                   <span className="truncate">{contact.phone}</span>

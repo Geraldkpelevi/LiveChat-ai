@@ -64,7 +64,7 @@ export default function AppLayout() {
             <Sparkles size={19} />
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-gray-900">LiveChat</p>
+            <p className="truncate text-base font-bold text-gray-900">LiveChat</p>
             <p className="truncate text-[11px] text-gray-500">AI workspace</p>
           </div>
         </header>

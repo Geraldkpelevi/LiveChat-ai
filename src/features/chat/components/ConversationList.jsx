@@ -19,10 +19,10 @@ export default function ConversationList({
       <div className="border-b border-gray-100 p-4">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Messages
             </h2>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-sm text-gray-500">
               {conversations.length} conversations
             </p>
           </div>
@@ -45,7 +45,7 @@ export default function ConversationList({
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Search conversations..."
             aria-label="Search conversations"
-            className="h-10 min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400"
+            className="h-10 min-w-0 flex-1 bg-transparent text-base text-gray-800 outline-none placeholder:text-gray-400"
           />
         </label>
       </div>
@@ -83,7 +83,7 @@ export default function ConversationList({
               >
                 <div className="relative shrink-0">
                   <div
-                    className={`flex h-11 w-11 items-center justify-center rounded-full text-sm font-semibold ${
+                    className={`flex h-11 w-11 items-center justify-center rounded-full text-base font-semibold ${
                       isActive
                         ? "bg-indigo-600 text-white"
                         : "bg-gray-100 text-gray-600"
@@ -102,7 +102,7 @@ export default function ConversationList({
 
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center justify-between gap-2">
-                    <span className="truncate text-sm font-semibold text-gray-900">
+                    <span className="truncate  text-xl font-semibold text-gray-900">
                       {conversation.name}
                     </span>
 
@@ -112,7 +112,7 @@ export default function ConversationList({
                   </div>
 
                   <div className="mt-1 flex min-w-0 items-center justify-between gap-2">
-                    <p className="truncate text-xs text-gray-500">
+                    <p className="truncate text-sm text-gray-500">
                       {conversation.lastMessage}
                     </p>
 

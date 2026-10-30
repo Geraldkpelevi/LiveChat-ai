@@ -14,7 +14,7 @@ export default function NotFound() {
 
       <Link
         to="/messages"
-        className="mt-5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+        className="mt-5 rounded-lg bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700"
       >
         Back to Messages
       </Link>

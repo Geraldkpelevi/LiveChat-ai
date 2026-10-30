@@ -32,7 +32,7 @@ export default function MessageInput({ onSend }) {
         }}
         placeholder="Type a message..."
         rows={1}
-        className="max-h-32 min-h-11 min-w-0 flex-1 resize-y rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-sm outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 sm:px-4"
+        className="max-h-32 min-h-11 min-w-0 flex-1 resize-y rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-base outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 sm:px-4"
       />
 
       <button

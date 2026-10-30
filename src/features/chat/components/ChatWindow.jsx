@@ -24,11 +24,11 @@ export default function ChatWindow({
             <Bot size={30} />
           </div>
 
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-gray-900">
             Your conversations
           </h2>
 
-          <p className="mt-2 max-w-xs text-sm leading-6 text-gray-500">
+          <p className="mt-2 max-w-xs text-base leading-6 text-gray-500">
             Select a conversation to start chatting.
           </p>
         </div>
@@ -60,11 +60,11 @@ export default function ChatWindow({
           </div>
 
           <div className="min-w-0">
-            <h2 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
+            <h2 className="truncate text-base font-semibold text-gray-900">
               {conversation.name}
             </h2>
 
-            <p className="mt-0.5 text-xs text-gray-500">
+            <p className="mt-0.5 text-sm text-gray-500">
               {conversation.online ? "Online" : "Offline"}
             </p>
           </div>
@@ -113,9 +113,9 @@ export default function ChatWindow({
           </div>
 
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-800">AI Auto-Reply</p>
+            <p className="text-base font-semibold text-gray-800">AI Auto-Reply</p>
 
-            <p aria-live="polite" className="text-xs text-gray-500">
+            <p aria-live="polite" className="text-sm text-gray-500">
               {aiEnabled ? "Automatic replies enabled" : "Replies are manual"}
             </p>
           </div>

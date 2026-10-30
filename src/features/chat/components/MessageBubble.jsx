@@ -17,7 +17,7 @@ export default function MessageBubble({ message }) {
             : "rounded-bl-md bg-gray-100 text-gray-800"
         }`}
       >
-        <p className="whitespace-pre-wrap text-sm leading-6">
+        <p className="whitespace-pre-wrap text-base leading-6">
           {message.text}
         </p>
 

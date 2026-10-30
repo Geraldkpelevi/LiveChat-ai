@@ -39,7 +39,7 @@ export default function Sidebar({
               <h1 className="truncate text-base font-bold tracking-tight text-gray-900">
                 {brand.name}
               </h1>
-              <p className="truncate text-[11px] text-gray-500">
+              <p className="truncate text-xs text-gray-500">
                 {brand.subtitle}
               </p>
             </div>
@@ -66,7 +66,7 @@ export default function Sidebar({
         className="min-h-0 flex-1 space-y-1 overflow-x-hidden overflow-y-auto p-3"
       >
         {!collapsed && (
-          <p className="mb-3 px-3 pt-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">
+          <p className="mb-3 px-3 pt-3 text-sm font-semibold uppercase tracking-[0.15em] text-gray-400">
             Workspace
           </p>
         )}
@@ -83,7 +83,7 @@ export default function Sidebar({
               title={collapsed ? item.label : undefined}
               aria-label={item.label}
               className={({ isActive }) =>
-                `flex w-full min-w-0 items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
+                `flex w-full min-w-0 items-center gap-3 rounded-xl px-3 py-3 text-base font-medium transition ${
                   collapsed ? "justify-center" : ""
                 } ${
                   isActive
@@ -124,10 +124,10 @@ export default function Sidebar({
 
           {!collapsed && (
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-gray-800">
+              <p className="truncate text-base font-semibold text-gray-800">
                 {user.name}
               </p>
-              <p className="truncate text-xs text-gray-500">{user.role}</p>
+              <p className="truncate text-sm text-gray-500">{user.role}</p>
             </div>
           )}
         </div>
