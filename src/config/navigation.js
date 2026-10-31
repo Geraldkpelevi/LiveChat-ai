@@ -4,9 +4,17 @@ import {
   MessageCircle,
   Settings,
   Users,
+  LayoutDashboard ,
 } from "lucide-react";
 
 export const navigationItems = [
+
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    path: "/dashboard",
+    icon: LayoutDashboard ,
+  },
   {
     id: "messages",
     label: "Messages",
