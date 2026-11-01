@@ -1,54 +1,58 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import axiosInstance from "./axiosInstance";
 
-export const loginUser = async (credentials) => {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Unable to sign in.");
+const getResultData = (result, fallbackMessage) => {
+  if (!result?.success) {
+    throw new Error(result?.message || fallbackMessage);
   }
 
   return result.data;
 };
 
-export const registerUser = async (userData) => {
-  const response = await fetch(`${API_URL}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
+const getRequestError = (error, fallbackMessage) => {
+  const message = error.response?.data?.message;
 
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Unable to create your account.");
+  if (typeof message === "string" && message) {
+    return new Error(message);
   }
 
-  return result.data;
-};
-
-export const getCurrentUser = async (token) => {
-  const response = await fetch(`${API_URL}/auth/me`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const result = await response.json();
-
-  if (!response.ok || !result.success) {
-    throw new Error(result.message || "Unable to verify your session.");
+  if (error.response) {
+    return new Error(fallbackMessage);
   }
 
-  return result.data.user;
+  return error;
 };
+
+const requestAuth = async (request, fallbackMessage) => {
+  try {
+    const { data } = await request;
+    return getResultData(data, fallbackMessage);
+  } catch (error) {
+    if (error instanceof Error && !error.response) {
+      throw error;
+    }
+
+    throw getRequestError(error, fallbackMessage);
+  }
+};
+
+export const loginUser = (credentials) =>
+  requestAuth(
+    axiosInstance.post("/auth/login", credentials),
+    "Unable to sign in."
+  );
+
+export const registerUser = (userData) =>
+  requestAuth(
+    axiosInstance.post("/auth/register", userData),
+    "Unable to create your account."
+  );
+
+export const getCurrentUser = (token) =>
+  requestAuth(
+    axiosInstance.get("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    "Unable to verify your session."
+  ).then((data) => data.user);
