@@ -1,7 +1,7 @@
 import { Sparkles, X } from "lucide-react";
 import { navigationItems as defaultNavigationItems } from "../../config/navigation";
 import { useAuth } from "../../context/AuthContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 export default function Sidebar({
   collapsed = false,
   onToggleCollapse,
@@ -15,7 +15,6 @@ export default function Sidebar({
   
 }) {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <aside
@@ -112,7 +111,9 @@ export default function Sidebar({
 
       {/* User profile */}
       <div className="shrink-0 border-t border-gray-100 p-3 *:cursor-pointer">
-        <div  onClick={() => navigate("/profile")}
+        <NavLink
+          to="/profile"
+          onClick={onNavigate}
           className={`flex min-w-0 items-center gap-3 rounded-xl bg-gray-50 p-3 ${
             collapsed ? "justify-center" : ""
           }`}
@@ -131,7 +132,7 @@ export default function Sidebar({
               <p className="truncate text-sm text-gray-500">{user.role}</p>
             </div>
           )}
-        </div>
+        </NavLink>
       </div>
     </aside>
   );
