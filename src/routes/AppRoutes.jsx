@@ -8,9 +8,9 @@ import Contacts from "../pages/Contacts";
 import Dashboad from "../pages/Dashboad";
 import Messages from "../pages/Messages";
 import NotFound from "../pages/NotFound";
-import Settings from "../pages/Settings";
-
+import Profile from "../pages/Profile";
 import ProtectedRoute from "../routes/ProtectedRoute";
+import AdminSettings from "../pages/AdminSettings";
 
 export default function AppRoutes() {
   return (
@@ -24,11 +24,12 @@ export default function AppRoutes() {
       {/* Protected customer routes */}
       <Route element={<ProtectedRoute allowedRoles={["CUSTOMER"]} />}>
         <Route element={<AppLayout />}>
+          <Route path="/profile" element={<Profile />} />
           <Route path="/dashboard" element={<Dashboad />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/ai" element={<AIAssistant />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<AdminSettings />} />
         </Route>
       </Route>
 
