@@ -97,18 +97,18 @@ export default function Profile() {
           <div className="px-5 pb-6 sm:px-8">
 
             {/* Avatar */}
-            <div className="-mt-12 flex flex-col gap-4 sm:-mt-14 sm:flex-row sm:items-end sm:justify-between">
+            <div className="-mt-18 flex flex-col gap-4 sm:-mt-14 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex items-end gap-4">
                 <div className="flex h-24 w-24 items-center justify-center rounded-2xl border-4 border-white bg-indigo-100 text-2xl font-bold text-indigo-700 shadow-sm sm:h-28 sm:w-28">
                   {initials}
                 </div>
 
-                <div className="pb-1">
-                  <h2 className="text-xl font-bold text-gray-900">
+                <div className="pb-4 mb-2">
+                  <h2 className="text-xl font-bold text-white lg:text-black">
                     {fullName}
                   </h2>
 
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-gray-300">
                     {user?.email}
                   </p>
                 </div>
