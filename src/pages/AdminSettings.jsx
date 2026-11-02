@@ -128,8 +128,8 @@ export default function AdminSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <div className="min-h-full w-full bg-gray-50 py-6">
+      <div className="mx-auto w-full max-w-7xl">
 
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

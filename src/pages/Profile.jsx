@@ -65,8 +65,8 @@ export default function Profile() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-1 sm:px- lg:px-8">
-      <div className="mx-auto max-w-4xl">
+    <div className="min-h-full w-full bg-gray-50 py-1">
+      <div className="mx-auto w-full max-w-4xl">
 
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
