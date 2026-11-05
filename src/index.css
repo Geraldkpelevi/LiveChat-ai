@@ -67,7 +67,7 @@ textarea:focus-visible {
   min-height: 100dvh;
   background-image:
     linear-gradient(rgb(15 23 42 / 45%), rgb(15 23 42 / 45%)),
-    url("https://mcdn.wallpapersafari.com/medium/16/48/yia5sT.jpg");
+    url("./assets/login-background.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
