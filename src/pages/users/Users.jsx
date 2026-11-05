@@ -32,9 +32,13 @@ const Users = () => {
     status,
     page,
     loading,
+    isFiltering,
     error,
     actionLoading,
+    roleUpdatingUserId,
+    statusUpdatingUserId,
     fetchUsers,
+    handleRefreshUsers,
     handleSearch,
     handleRoleFilter,
     handleStatusFilter,
@@ -178,7 +182,10 @@ const Users = () => {
         </div>
 
         {/* Users Table */}
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div
+          className="relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+          aria-busy={isFiltering}
+        >
 
           {/* Search and Filters */}
           <div className="flex flex-col gap-3 border-b border-gray-200 p-4 lg:flex-row lg:items-center lg:justify-between">
@@ -221,17 +228,35 @@ const Users = () => {
               </select>
 
               <button
-                onClick={fetchUsers}
-                disabled={loading}
+                onClick={handleRefreshUsers}
+                disabled={loading || isFiltering}
                 className="rounded-lg border border-gray-300 p-2.5 text-gray-600 transition hover:bg-gray-50 disabled:opacity-50"
-                title="Refresh users"
+                title="Clear filters and load all users"
+                aria-label="Clear filters and load all users"
               >
                 <RefreshCw
                   size={17}
-                  className={loading ? "animate-spin" : ""}
+                  className={loading || isFiltering ? "animate-spin" : ""}
                 />
               </button>
             </div>
+
+            {isFiltering && (
+              <div
+                className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]"
+                role="status"
+                aria-live="polite"
+              >
+                <div className="flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow">
+                  <Loader2
+                    size={18}
+                    className="animate-spin text-teal-700"
+                    aria-hidden="true"
+                  />
+                  Loading users...
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Table Information */}
@@ -314,37 +339,55 @@ const Users = () => {
 
                         {/* User Role */}
                         <td className="px-5 py-4">
-                          <select
-                            id={`role-${userId}`}
-                            value={user.role}
-                            disabled={actionLoading}
-                            onChange={(e) =>
-                              onRoleChange(userId, e.target.value)
-                            }
-                            className={`rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none disabled:opacity-50 ${
-                              roleStyles[user.role] ||
-                              "bg-gray-100 text-gray-700"
-                            }`}
-                          >
-                            <option value="CUSTOMER">Customer</option>
-                            <option value="AGENT">Agent</option>
-                            <option value="ADMIN">Admin</option>
-                          </select>
+                          <div className="flex items-center gap-2">
+                            <select
+                              id={`role-${userId}`}
+                              value={user.role}
+                              disabled={actionLoading}
+                              onChange={(e) =>
+                                onRoleChange(userId, e.target.value)
+                              }
+                              className={`rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none disabled:opacity-50 ${
+                                roleStyles[user.role] ||
+                                "bg-gray-100 text-gray-700"
+                              }`}
+                            >
+                              <option value="CUSTOMER">Customer</option>
+                              <option value="AGENT">Agent</option>
+                              <option value="ADMIN">Admin</option>
+                            </select>
+                            {roleUpdatingUserId === userId && (
+                              <Loader2
+                                size={15}
+                                className="animate-spin text-teal-700"
+                                aria-label="Updating role"
+                              />
+                            )}
+                          </div>
                         </td>
 
                         {/* Account Status */}
                         <td className="px-5 py-4">
-                          <button
-                            onClick={() => onStatusChange(user)}
-                            disabled={actionLoading}
-                            className={`rounded-full px-3 py-1.5 text-xs font-semibold disabled:opacity-50 ${
-                              user.isActive
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-red-100 text-red-700"
-                            }`}
-                          >
-                            {user.isActive ? "Active" : "Inactive"}
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => onStatusChange(user)}
+                              disabled={actionLoading}
+                              className={`rounded-full px-3 py-1.5 text-xs font-semibold disabled:opacity-50 ${
+                                user.isActive
+                                  ? "bg-emerald-100 text-emerald-700"
+                                  : "bg-red-100 text-red-700"
+                              }`}
+                            >
+                              {user.isActive ? "Active" : "Inactive"}
+                            </button>
+                            {statusUpdatingUserId === userId && (
+                              <Loader2
+                                size={15}
+                                className="animate-spin text-teal-700"
+                                aria-label="Updating status"
+                              />
+                            )}
+                          </div>
                         </td>
 
                         {/* Actions */}
