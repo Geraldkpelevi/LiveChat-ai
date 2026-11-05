@@ -106,6 +106,7 @@ export default function AdminSettings() {
     twoFactorAuth: false,
   });
 
+  
   const tabs = [
     { id: "general", label: "General", icon: Settings },
     { id: "users", label: "User Management", icon: Users },

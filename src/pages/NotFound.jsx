@@ -13,10 +13,10 @@ export default function NotFound() {
       </p>
 
       <Link
-        to="/messages"
+        to="/signin"
         className="mt-5 rounded-lg bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700"
       >
-        Back to Messages
+        Back to login
       </Link>
     </div>
   );

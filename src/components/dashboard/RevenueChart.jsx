@@ -76,7 +76,7 @@ function RevenueChart() {
   ];
 
   return (
-    <Card className="border border-gray-200 shadow-sm">
+    <Card className="border border-gray-200 bg-white shadow-sm dark:border-gray-200 dark:bg-white">
       <div className="mb-4">
         <h5 className="text-lg font-semibold text-gray-900">
           Revenue Overview

@@ -31,7 +31,7 @@ const activities = [
     color: "bg-purple-100 text-purple-600",
   },
   {
-    id: 2,
+    id: 4,
     title: "Project completed",
     description: "Mobile Application was completed.",
     time: "1 hour ago",
@@ -39,7 +39,7 @@ const activities = [
     color: "bg-green-100 text-green-600",
   },
   {
-    id: 3,
+    id: 5,
     title: "New report created",
     description: "Monthly revenue report was generated.",
     time: "3 hours ago",
@@ -47,7 +47,7 @@ const activities = [
     color: "bg-purple-100 text-purple-600",
   },
   {
-    id: 2,
+    id: 6,
     title: "Project completed",
     description: "Mobile Application was completed.",
     time: "1 hour ago",
@@ -55,7 +55,7 @@ const activities = [
     color: "bg-green-100 text-green-600",
   },
   {
-    id: 3,
+    id: 7,
     title: "New report created",
     description: "Monthly revenue report was generated.",
     time: "3 hours ago",
@@ -66,7 +66,7 @@ const activities = [
 
 function ActivitySection() {
   return (
-    <Card className="border border-gray-200 shadow-sm">
+    <Card className="border border-gray-200 bg-white shadow-sm dark:border-gray-200 dark:bg-white">
       <div className="mb-4">
         <h5 className="text-lg font-semibold text-gray-900">Recent Activity</h5>
         <p className="text-sm text-gray-500">

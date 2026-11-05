@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import FloatingInput from "../components/FloatingInput";
 import useLogin from "../hooks/useLogin";
 import Button from "../components/Button";
 
 function Signin() {
   const { login, isLoading, error } = useLogin();
+  const { state } = useLocation();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -100,6 +101,12 @@ function Signin() {
                 {error && (
                   <p className="text-sm text-red-500" role="alert">
                     failed to sign in, pleace try again
+                  </p>
+                )}
+
+                {state?.message && (
+                  <p className="text-sm text-green-600" role="status">
+                    {state.message}
                   </p>
                 )}
 

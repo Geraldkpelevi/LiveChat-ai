@@ -9,7 +9,7 @@ function StatisticsCard({
   positive = true,
 }) {
   return (
-    <Card className="border border-gray-200 shadow-sm">
+    <Card className="border border-gray-200 bg-white shadow-sm dark:border-gray-200 dark:bg-white">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-500">{title}</p>

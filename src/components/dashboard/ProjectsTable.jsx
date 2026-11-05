@@ -73,7 +73,7 @@ function ProjectProgress({ value }) {
 
 function ProjectsTable() {
   return (
-    <Card className="w-full min-w-0 border border-gray-200 shadow-sm">
+    <Card className="w-full min-w-0 border border-gray-200 bg-white shadow-sm dark:border-gray-200 dark:bg-white">
       <div className="mb-4">
         <h5 className="text-lg font-semibold text-gray-900">
           Recent Projects
@@ -90,7 +90,7 @@ function ProjectsTable() {
             className="min-w-0 rounded-lg border border-gray-200 p-3 sm:p-4"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
-              <h6 className="min-w-0 break-words text-sm font-semibold text-gray-900">
+              <h6 className="min-w-0 wrap-break-word text-sm font-semibold text-gray-900">
                 {project.name}
               </h6>
               <Badge color={statusColors[project.status]}>
@@ -100,7 +100,7 @@ function ProjectsTable() {
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
               <div className="min-w-0">
                 <dt className="text-xs font-medium text-gray-500">Team</dt>
-                <dd className="mt-1 break-words text-gray-900">
+                <dd className="mt-1 wrap-break-word text-gray-900">
                   {project.team}
                 </dd>
               </div>
@@ -122,7 +122,7 @@ function ProjectsTable() {
       </div>
 
       <div className="hidden min-w-0 overflow-x-auto xl:block">
-        <Table hoverable className="w-full min-w-[680px] table-fixed">
+        <Table hoverable className="w-full min-w-170 table-fixed">
           <TableHead>
             <TableRow>
               <TableHeadCell className="w-[24%] whitespace-nowrap">
