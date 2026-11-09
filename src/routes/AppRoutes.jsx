@@ -15,11 +15,11 @@ import Home from "../pages/dashboard/Home";
 import Messages from "../pages/Messages";
 import Profile from "../pages/Profile";
 // Admin pages
+import AdminCustomersPage from "../pages/admin/AdminCustomersPage";
+import AdminEmployeesPage from "../pages/admin/AdminEmployeesPage";
 import AdminSettings from "../pages/admin/AdminSettings";
 import Customersettings from "../pages/customers/Settings";
-import AdminCustomersPage from "../pages/admin/AdminCustomersPage";
 
-import Users from "../pages/users/Users";
 
 // Routes
 import ProtectedRoute from "../routes/ProtectedRoute";
@@ -61,10 +61,12 @@ export default function AppRoutes() {
           <Route path="/admin/aiassistant" element={<AIAssistant />} />
           <Route path="/admin/profile" element={<Profile />} />
           <Route path="/admin/change-password" element={<ChangePassword />} />
-          <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
-
-          <Route path="/admin/customers-list" element={<AdminCustomersPage />} />
+          <Route path="/admin/employees" element={<AdminEmployeesPage />} />
+          <Route
+            path="/admin/customers-list"
+            element={<AdminCustomersPage />}
+          />
         </Route>
       </Route>
 

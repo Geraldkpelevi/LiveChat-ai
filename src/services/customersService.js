@@ -37,11 +37,18 @@ const request = async (apiRequest, fallbackMessage) => {
 };
 
 // Fetch all customers
-export const getCustomers = (params = {}) =>
-  request(
-    axiosInstance.get("/admin/customers", { params }),
+export const getCustomers = (params = {}) => {
+  const queryParams = Object.fromEntries(
+    Object.entries(params).filter(
+      ([, value]) => value !== undefined && value !== null && value !== ""
+    )
+  );
+
+  return request(
+    axiosInstance.get("/admin/customers", { params: queryParams }),
     "Unable to fetch customers."
   );
+};
 
 // Fetch customer by ID
 export const getCustomerById = (customerId) =>

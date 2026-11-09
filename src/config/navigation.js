@@ -93,20 +93,14 @@ export const navigationConfig = {
       end: true,
     },
     {
-      id: "messages",
-      label: "Messages",
-      path: "/admin/messages",
-      icon: MessageCircle,
-      badge: "Live",
-      end: false,
-    },
-    {
-      id: "users",
-      label: "Users Management",
-      path: "/admin/users",
+      id: "employees",
+      label: "Employees",
+      path: "/admin/employees",
       icon: Users,
       end: true,
     },
+    
+   
     {
       id: "customers",
       label: "Customers",
@@ -120,6 +114,14 @@ export const navigationConfig = {
       path: "/admin/contacts",
       icon: Users,
       end: true,
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      path: "/admin/messages",
+      icon: MessageCircle,
+      badge: "Live",
+      end: false,
     },
     {
       id: "ai",
