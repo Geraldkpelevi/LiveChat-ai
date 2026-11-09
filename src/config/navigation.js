@@ -5,6 +5,7 @@ import {
   Settings,
   Users,
   LayoutDashboard,
+  UserRoundGroup as UserRound,
 } from "lucide-react";
 
 /**
@@ -104,6 +105,13 @@ export const navigationConfig = {
       label: "Users Management",
       path: "/admin/users",
       icon: Users,
+      end: true,
+    },
+    {
+      id: "customers",
+      label: "Customers",
+      path: "/admin/customers-list",
+      icon: UserRound,
       end: true,
     },
     {

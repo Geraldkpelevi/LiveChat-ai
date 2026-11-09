@@ -16,7 +16,8 @@ import Messages from "../pages/Messages";
 import Profile from "../pages/Profile";
 // Admin pages
 import AdminSettings from "../pages/admin/AdminSettings";
-import Customersettings from "../pages/customer/Settings";
+import Customersettings from "../pages/customers/Settings";
+import AdminCustomersPage from "../pages/admin/AdminCustomersPage";
 
 import Users from "../pages/users/Users";
 
@@ -62,6 +63,8 @@ export default function AppRoutes() {
           <Route path="/admin/change-password" element={<ChangePassword />} />
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+
+          <Route path="/admin/customers-list" element={<AdminCustomersPage />} />
         </Route>
       </Route>
 
