@@ -1,10 +1,30 @@
 import axiosInstance from "./axiosInstance";
 
-// GET all employees
-export const getEmployees = async () => {
-  const response = await axiosInstance.get("/admin/employees");
 
-  return response.data.data;
+
+export const registerEmployee = async (employeeData) => {
+  const response = await axiosInstance.post(
+    "/employees/register",
+    employeeData,
+  );
+
+  return response.data;
+};
+// GET paginated employees
+export const getEmployees = async ({ page = 1, limit = 10, status } = {}) => {
+  const params = { page, limit };
+
+  if (status) {
+    params.status = status;
+  }
+
+  const response = await axiosInstance.get("/admin/employees", { params });
+  const result = response.data;
+
+  return {
+    employees: Array.isArray(result?.data) ? result.data : [],
+    pagination: result?.meta || {},
+  };
 };
 
 // PATCH employee system role

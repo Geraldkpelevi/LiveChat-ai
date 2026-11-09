@@ -100,7 +100,7 @@ function Signin() {
 
                 {error && (
                   <p className="text-sm text-red-500" role="alert">
-                    failed to sign in, pleace try again
+                    {error}
                   </p>
                 )}
 

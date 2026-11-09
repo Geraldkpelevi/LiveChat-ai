@@ -1,20 +1,23 @@
-import { useMemo, useState } from "react";
 import {
-  Search,
-  Trash2,
-  Settings,
-  Users as UsersIcon,
+  BriefcaseBusiness,
   Loader2,
   RefreshCw,
-  BriefcaseBusiness,
+  Search,
+  Settings,
+  Trash2,
+  PlusIcon,
+  Users as UsersIcon,
 } from "lucide-react";
-
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
+  useDeleteEmployee,
   useEmployees,
   useUpdateEmployeeRole,
-  useDeleteEmployee,
   useUpdateEmployeeStatus,
 } from "../../hooks/useEmployees";
+
+import Pagination from "../../components/Pagination";
 
 const roleStyles = {
   ADMIN: "bg-slate-900 text-white",
@@ -38,6 +41,7 @@ const employeeRoles = [
   "SALES",
   "MARKETING",
   "DEVELOPER",
+  "TIMEKEEPER",
   "DESIGNER",
   "ANALYST",
   "CONSULTANT",
@@ -49,35 +53,47 @@ const employeeRoles = [
   "ADMIN",
 ];
 
+const EMPLOYEE_PAGE_LIMIT = 10;
+const EMPTY_EMPLOYEES = [];
+
 const Employees = () => {
+  const [search, setSearch] = useState("");
+  const [role, setRole] = useState("");
+  const [status, setStatus] = useState("");
+  const [page, setPage] = useState(1);
+
+const navigate = useNavigate();
+
   const {
-    data: employees = [],
+    data: employeeData,
     isLoading,
     isError,
     error,
     refetch,
     isFetching,
-  } = useEmployees();
+  } = useEmployees({ page, limit: EMPLOYEE_PAGE_LIMIT, status });
+
+  const employees = employeeData?.employees || EMPTY_EMPLOYEES;
+  const employeePagination = employeeData?.pagination;
+  const pagination = {
+    totalRecords: employeePagination?.totalRecords ?? 0,
+    currentPage: employeePagination?.currentPage ?? page,
+    totalPages: Math.max(1, employeePagination?.totalPages ?? 1),
+    pageLimit: employeePagination?.pageLimit ?? EMPLOYEE_PAGE_LIMIT,
+  };
 
   const updateRoleMutation = useUpdateEmployeeRole();
   const deleteMutation = useDeleteEmployee();
   const updateStatusMutation = useUpdateEmployeeStatus();
 
-  const [search, setSearch] = useState("");
-  const [role, setRole] = useState("");
-  const [status, setStatus] = useState("");
-
-  const [roleUpdatingEmployeeId, setRoleUpdatingEmployeeId] =
-    useState(null);
+  const [roleUpdatingEmployeeId, setRoleUpdatingEmployeeId] = useState(null);
 
   const [statusUpdatingEmployeeId, setStatusUpdatingEmployeeId] =
     useState(null);
 
-  const [deleteLoadingEmployeeId, setDeleteLoadingEmployeeId] =
-    useState(null);
+  const [deleteLoadingEmployeeId, setDeleteLoadingEmployeeId] = useState(null);
 
-  const getEmployeeId = (employee) =>
-    employee._id || employee.id;
+  const getEmployeeId = (employee) => employee._id || employee.id;
 
   const getInitials = (name = "") =>
     name
@@ -104,15 +120,11 @@ const Employees = () => {
         employeeNumber,
         department,
         jobTitle,
-      ].some((value) =>
-        value.toLowerCase().includes(search.toLowerCase())
-      );
+      ].some((value) => value.toLowerCase().includes(search.toLowerCase()));
 
-      const matchesRole =
-        !role || employee.user?.role === role;
+      const matchesRole = !role || employee.user?.role === role;
 
-      const matchesStatus =
-        !status || employee.status === status;
+      const matchesStatus = !status || employee.status === status;
 
       return matchesSearch && matchesRole && matchesStatus;
     });
@@ -121,7 +133,7 @@ const Employees = () => {
   // Update employee role
   const onRoleChange = async (employeeId, newRole) => {
     const confirmed = window.confirm(
-      `Are you sure you want to assign the ${newRole} system role to this employee?`
+      `Are you sure you want to assign the ${newRole} system role to this employee?`,
     );
 
     if (!confirmed) return;
@@ -135,8 +147,7 @@ const Employees = () => {
       });
     } catch (error) {
       alert(
-        error?.response?.data?.message ||
-          "Unable to update employee role."
+        error?.response?.data?.message || "Unable to update employee role.",
       );
     } finally {
       setRoleUpdatingEmployeeId(null);
@@ -147,11 +158,10 @@ const Employees = () => {
   const onStatusChange = async (employee) => {
     const employeeId = getEmployeeId(employee);
 
-    const newStatus =
-      employee.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+    const newStatus = employee.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
     const confirmed = window.confirm(
-      `Are you sure you want to change ${employee.user?.name}'s status to ${newStatus}?`
+      `Are you sure you want to change ${employee.user?.name}'s status to ${newStatus}?`,
     );
 
     if (!confirmed) return;
@@ -163,10 +173,10 @@ const Employees = () => {
         employeeId,
         status: newStatus,
       });
+      setPage(1);
     } catch (error) {
       alert(
-        error?.response?.data?.message ||
-          "Unable to update employee status."
+        error?.response?.data?.message || "Unable to update employee status.",
       );
     } finally {
       setStatusUpdatingEmployeeId(null);
@@ -178,7 +188,7 @@ const Employees = () => {
     const employeeId = getEmployeeId(employee);
 
     const confirmed = window.confirm(
-      `Are you sure you want to remove ${employee.user?.name}? This action cannot be undone.`
+      `Are you sure you want to remove ${employee.user?.name}? This action cannot be undone.`,
     );
 
     if (!confirmed) return;
@@ -187,11 +197,11 @@ const Employees = () => {
 
     try {
       await deleteMutation.mutateAsync(employeeId);
+      if (employees.length === 1 && page > 1) {
+        setPage((currentPage) => currentPage - 1);
+      }
     } catch (error) {
-      alert(
-        error?.response?.data?.message ||
-          "Unable to remove employee."
-      );
+      alert(error?.response?.data?.message || "Unable to remove employee.");
     } finally {
       setDeleteLoadingEmployeeId(null);
     }
@@ -201,15 +211,37 @@ const Employees = () => {
     setSearch("");
     setRole("");
     setStatus("");
+    setPage(1);
     refetch();
   };
 
-  const activeEmployees = employees.filter(
-    (employee) => employee.status === "ACTIVE"
-  ).length;
+  const handleSearchChange = (value) => {
+    setSearch(value);
+    setPage(1);
+  };
 
+  const handleRoleChange = (value) => {
+    setRole(value);
+    setPage(1);
+  };
+
+  const handleStatusFilter = (value) => {
+    setStatus(value);
+    setPage(1);
+  };
+
+  const goToPage = (pageNumber) => {
+    setPage(Math.max(1, Math.min(pageNumber, pagination.totalPages)));
+  };
+
+  const activeEmployees = employees.filter(
+    (employee) => employee.status === "ACTIVE",
+  ).length;
+  const pendingEmployees = employees.filter(
+    (employee) => employee.status === "PENDING",
+  ).length;
   const inactiveEmployees = employees.filter(
-    (employee) => employee.status !== "ACTIVE"
+    (employee) => employee.status !== "ACTIVE",
   ).length;
 
   const actionLoading =
@@ -217,10 +249,11 @@ const Employees = () => {
     updateStatusMutation.isPending ||
     deleteMutation.isPending;
 
+  
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
-
         {/* Page Header */}
         <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
@@ -232,11 +265,20 @@ const Employees = () => {
               Home / Administration / Employee Management
             </p>
           </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/employee/register")}
+              type="button"
+              className="flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"              
+            >
+              <PlusIcon size={20} />
+              Add Employee
+            </button>
+          </div>
         </div>
 
         {/* Employee Statistics */}
-        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {/* Total Employees */}
           <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
@@ -246,7 +288,7 @@ const Employees = () => {
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-gray-900">
-                  {employees.length}
+                  {pagination.totalRecords}
                 </h2>
               </div>
 
@@ -261,7 +303,7 @@ const Employees = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">
-                  Active Employees
+                  Active on this page
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-gray-900">
@@ -280,7 +322,7 @@ const Employees = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">
-                  Inactive Employees
+                  Inactive on this page
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-gray-900">
@@ -293,7 +335,24 @@ const Employees = () => {
               </div>
             </div>
           </div>
+          {/* Pending Employees */}
+          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">
+                  Pending on this page
+                </p>
 
+                <h2 className="mt-2 text-3xl font-bold text-gray-900">
+                  {pendingEmployees}
+                </h2>
+              </div>
+
+              <div className="rounded-xl bg-red-50 p-3 text-red-700">
+                <UsersIcon size={25} />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Employees Table */}
@@ -301,10 +360,8 @@ const Employees = () => {
           className="relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
           aria-busy={isFetching}
         >
-
           {/* Search and Filters */}
           <div className="flex flex-col gap-3 border-b border-gray-200 p-4 lg:flex-row lg:items-center lg:justify-between">
-
             {/* Search */}
             <div className="relative w-full lg:max-w-sm">
               <Search
@@ -315,7 +372,7 @@ const Employees = () => {
               <input
                 type="text"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search employees..."
                 className="w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-4 text-sm outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-100"
               />
@@ -323,10 +380,9 @@ const Employees = () => {
 
             {/* Filters */}
             <div className="flex flex-wrap gap-2">
-
               <select
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e) => handleRoleChange(e.target.value)}
                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-teal-600"
               >
                 <option value="">All Roles</option>
@@ -340,13 +396,14 @@ const Employees = () => {
 
               <select
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={(e) => handleStatusFilter(e.target.value)}
                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-teal-600"
               >
                 <option value="">All Status</option>
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
                 <option value="SUSPENDED">Suspended</option>
+                <option value="PENDING">Pending</option>
               </select>
 
               <button
@@ -358,12 +415,9 @@ const Employees = () => {
               >
                 <RefreshCw
                   size={17}
-                  className={
-                    isFetching ? "animate-spin" : ""
-                  }
+                  className={isFetching ? "animate-spin" : ""}
                 />
               </button>
-
             </div>
 
             {/* Filtering Overlay */}
@@ -374,29 +428,24 @@ const Employees = () => {
                 aria-live="polite"
               >
                 <div className="flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow">
-                  <Loader2
-                    size={18}
-                    className="animate-spin text-teal-700"
-                  />
+                  <Loader2 size={18} className="animate-spin text-teal-700" />
                   Refreshing employees...
                 </div>
               </div>
             )}
-
           </div>
 
           {/* Table Information */}
           <div className="flex items-center justify-between px-5 py-3">
             <p className="text-xs text-gray-500">
-              Showing {filteredEmployees.length} of{" "}
-              {employees.length} total employees
+              Showing {filteredEmployees.length} of {employees.length} on this
+              page ({pagination.totalRecords} total employees)
             </p>
           </div>
 
           {/* Responsive Table */}
           <div className="overflow-x-auto">
             <table className="w-full min-w-212.5 text-left text-sm">
-
               <thead className="border-y border-gray-200 bg-gray-50 text-xs font-semibold uppercase text-gray-500">
                 <tr>
                   <th className="px-5 py-4">Employee</th>
@@ -408,7 +457,6 @@ const Employees = () => {
               </thead>
 
               <tbody className="divide-y divide-gray-100">
-
                 {isLoading ? (
                   <tr>
                     <td colSpan="5" className="py-16 text-center">
@@ -438,10 +486,7 @@ const Employees = () => {
                   </tr>
                 ) : filteredEmployees.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan="5"
-                      className="py-16 text-center text-gray-500"
-                    >
+                    <td colSpan="5" className="py-16 text-center text-gray-500">
                       No employees found.
                     </td>
                   </tr>
@@ -455,11 +500,9 @@ const Employees = () => {
                         key={employeeId}
                         className="transition hover:bg-gray-50"
                       >
-
                         {/* Employee Information */}
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-800">
                               {getInitials(user.name)}
                             </div>
@@ -477,7 +520,6 @@ const Employees = () => {
                                 {employee.employeeNumber}
                               </p>
                             </div>
-
                           </div>
                         </td>
 
@@ -495,7 +537,6 @@ const Employees = () => {
                         {/* Employee System Role */}
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-2">
-
                             <select
                               id={`role-${employeeId}`}
                               value={user.role || "EMPLOYEE"}
@@ -504,10 +545,7 @@ const Employees = () => {
                                 roleUpdatingEmployeeId === employeeId
                               }
                               onChange={(e) =>
-                                onRoleChange(
-                                  employeeId,
-                                  e.target.value
-                                )
+                                onRoleChange(employeeId, e.target.value)
                               }
                               className={`rounded-full border-0 px-3 py-1.5 text-xs font-semibold outline-none disabled:opacity-50 ${
                                 roleStyles[user.role] ||
@@ -532,7 +570,6 @@ const Employees = () => {
                                 aria-label="Updating role"
                               />
                             )}
-
                           </div>
 
                           <p className="mt-1 text-xs text-gray-400">
@@ -543,7 +580,6 @@ const Employees = () => {
                         {/* Employee Status */}
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-2">
-
                             <button
                               onClick={() => onStatusChange(employee)}
                               disabled={actionLoading}
@@ -565,14 +601,12 @@ const Employees = () => {
                                 aria-label="Updating status"
                               />
                             )}
-
                           </div>
                         </td>
 
                         {/* Actions */}
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-4">
-
                             <button
                               onClick={() =>
                                 document
@@ -586,36 +620,35 @@ const Employees = () => {
                             </button>
 
                             <button
-                              onClick={() =>
-                                onDeleteEmployee(employee)
-                              }
+                              onClick={() => onDeleteEmployee(employee)}
                               disabled={actionLoading}
                               className="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 disabled:opacity-50"
                             >
                               {deleteLoadingEmployeeId === employeeId ? (
-                                <Loader2
-                                  size={15}
-                                  className="animate-spin"
-                                />
+                                <Loader2 size={15} className="animate-spin" />
                               ) : (
                                 <Trash2 size={15} />
                               )}
-
                               Remove
                             </button>
-
                           </div>
                         </td>
-
                       </tr>
                     );
                   })
                 )}
-
               </tbody>
             </table>
           </div>
 
+          {/* Pagination */}
+          <Pagination
+            pagination={pagination}
+            page={page}
+            goToPage={goToPage}
+            isLoading={isLoading}
+            isFetching={isFetching}
+          />
         </div>
       </div>
     </div>

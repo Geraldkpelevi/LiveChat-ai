@@ -52,6 +52,16 @@ export const navigationConfig = {
     },
   ],
 
+  EMPLOYEE: [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      path: "/employee/dashboard",
+      icon: LayoutDashboard,
+      end: true,
+    },
+  ],
+
   AGENT: [
     {
       id: "dashboard",
@@ -147,6 +157,11 @@ export const accountNavigationConfig = {
   CUSTOMER: {
     personalDetails: "/profile",
     changePassword: "/change-password",
+  },
+
+  EMPLOYEE: {
+    personalDetails: "/employee/profile",
+    changePassword: "/employee/change-password",
   },
 
   AGENT: {

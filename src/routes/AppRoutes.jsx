@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 // Authentication
+import EmployeeRegistration from "../auth/EmployeeRegistration";
 import Signin from "../auth/Signin";
 import Signup from "../auth/Signup";
 
@@ -20,7 +21,6 @@ import AdminEmployeesPage from "../pages/admin/AdminEmployeesPage";
 import AdminSettings from "../pages/admin/AdminSettings";
 import Customersettings from "../pages/customers/Settings";
 
-
 // Routes
 import ProtectedRoute from "../routes/ProtectedRoute";
 
@@ -32,6 +32,7 @@ export default function AppRoutes() {
     <Routes>
       {/* ================= PUBLIC ROUTES ================= */}
 
+      <Route path="/employee/register" element={<EmployeeRegistration />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
 
@@ -48,6 +49,19 @@ export default function AppRoutes() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/customer-settings" element={<Customersettings />} />
+        </Route>
+      </Route>
+
+      {/* ================= EMPLOYEE ROUTES ================= */}
+
+      <Route element={<ProtectedRoute allowedRoles={["EMPLOYEE"]} />}>
+        <Route element={<AppLayout />}>
+          <Route path="/employee/dashboard" element={<Home />} />
+          <Route path="/employee/profile" element={<Profile />} />
+          <Route
+            path="/employee/change-password"
+            element={<ChangePassword />}
+          />
         </Route>
       </Route>
 
@@ -77,7 +91,11 @@ export default function AppRoutes() {
         element={<Navigate to="/admin/dashboard" replace />}
       />
       <Route element={<ProtectedRoute allowedRoles={["AGENT"]} />}>
-        <Route path="/agent/change-password" element={<ChangePassword />} />
+        <Route element={<AppLayout />}>
+          <Route path="/agent/dashboard" element={<Home />} />
+          <Route path="/agent/profile" element={<Profile />} />
+          <Route path="/agent/change-password" element={<ChangePassword />} />
+        </Route>
       </Route>
 
       {/* ================= NOT FOUND ================= */}

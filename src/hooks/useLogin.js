@@ -4,8 +4,9 @@ import { useAuth } from "../context/AuthContext";
 
 const roleRedirects = {
   CUSTOMER: "/messages",
-  AGENT: "/dashboard",
-  ADMIN: "/dashboard",
+  EMPLOYEE: "/employee/dashboard",
+  AGENT: "/agent/dashboard",
+  ADMIN: "/admin/dashboard",
 };
 
 function useLogin() {

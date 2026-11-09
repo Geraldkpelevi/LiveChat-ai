@@ -1,16 +1,11 @@
-
 import {
-  Search,
-  Trash2,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Users as UsersIcon,
   Loader2,
   RefreshCw,
+  Search,
+  Trash2,
+  Users as UsersIcon,
 } from "lucide-react";
-
+import Pagination from "../../components/Pagination";
 import useCustomers from "../../hooks/useCustomers";
 
 const AdminCustomersPage = () => {
@@ -31,13 +26,10 @@ const AdminCustomersPage = () => {
     handleStatusFilter,
     handleUpdateStatus,
     handleDeleteCustomer,
-    nextPage,
-    previousPage,
     goToPage,
   } = useCustomers();
 
-  const getCustomerId = (customer) =>
-    customer.id || customer._id;
+  const getCustomerId = (customer) => customer.id || customer._id;
 
   const getInitials = (name = "") =>
     name
@@ -51,7 +43,7 @@ const AdminCustomersPage = () => {
   const onStatusChange = async (customer) => {
     const success = await handleUpdateStatus(
       getCustomerId(customer),
-      !customer.isActive
+      !customer.isActive,
     );
 
     if (!success) {
@@ -61,29 +53,17 @@ const AdminCustomersPage = () => {
 
   const onDeleteCustomer = async (customer) => {
     const confirmed = window.confirm(
-      `Are you sure you want to remove ${customer.name}?`
+      `Are you sure you want to remove ${customer.name}?`,
     );
 
     if (!confirmed) return;
 
-    const success = await handleDeleteCustomer(
-      getCustomerId(customer)
-    );
+    const success = await handleDeleteCustomer(getCustomerId(customer));
 
     if (!success) {
       alert("Unable to remove customer.");
     }
   };
-
-  const startItem =
-    pagination.totalCustomers === 0
-      ? 0
-      : (page - 1) * pagination.pageLimit + 1;
-
-  const endItem = Math.min(
-    page * pagination.pageLimit,
-    pagination.totalCustomers
-  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
@@ -162,9 +142,7 @@ const AdminCustomersPage = () => {
               >
                 <RefreshCw
                   size={17}
-                  className={
-                    loading || isFiltering ? "animate-spin" : ""
-                  }
+                  className={loading || isFiltering ? "animate-spin" : ""}
                 />
               </button>
             </div>
@@ -190,14 +168,14 @@ const AdminCustomersPage = () => {
           {/* Table Information */}
           <div className="flex items-center justify-between px-5 py-3">
             <p className="text-xs text-gray-500">
-              Showing {customers.length} of{" "}
-              {pagination.totalCustomers} total customers
+              Showing {customers.length} of {pagination.totalCustomers} total
+              customers
             </p>
           </div>
 
           {/* Responsive Table */}
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[650px] text-left text-sm">
+            <table className="w-full min-w-162.5 text-left text-sm">
               <thead className="border-y border-gray-200 bg-gray-50 text-xs font-semibold uppercase text-gray-500">
                 <tr>
                   <th className="px-5 py-4">Customer</th>
@@ -220,9 +198,7 @@ const AdminCustomersPage = () => {
                 ) : error ? (
                   <tr>
                     <td colSpan="4" className="py-16 text-center">
-                      <p className="text-sm text-red-600">
-                        {error}
-                      </p>
+                      <p className="text-sm text-red-600">{error}</p>
 
                       <button
                         onClick={fetchCustomers}
@@ -234,10 +210,7 @@ const AdminCustomersPage = () => {
                   </tr>
                 ) : customers.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan="4"
-                      className="py-16 text-center text-gray-500"
-                    >
+                    <td colSpan="4" className="py-16 text-center text-gray-500">
                       No customers found.
                     </td>
                   </tr>
@@ -309,14 +282,10 @@ const AdminCustomersPage = () => {
                             className="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 disabled:opacity-50"
                           >
                             {actionLoading ? (
-                              <Loader2
-                                size={15}
-                                className="animate-spin"
-                              />
+                              <Loader2 size={15} className="animate-spin" />
                             ) : (
                               <Trash2 size={15} />
                             )}
-
                             Remove
                           </button>
                         </td>
@@ -328,55 +297,18 @@ const AdminCustomersPage = () => {
             </table>
           </div>
 
-          {/* Pagination */}
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200 px-5 py-4 sm:flex-row">
-            <p className="text-sm text-gray-500">
-              Showing {startItem}–{endItem} of{" "}
-              {pagination.totalCustomers}
-            </p>
-
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => goToPage(1)}
-                disabled={page <= 1 || loading}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
-                title="First page"
-              >
-                <ChevronsLeft size={17} />
-              </button>
-
-              <button
-                onClick={previousPage}
-                disabled={page <= 1 || loading}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
-                title="Previous page"
-              >
-                <ChevronLeft size={17} />
-              </button>
-
-              <span className="px-3 text-sm font-semibold text-gray-700">
-                {pagination.currentPage} / {pagination.totalPages}
-              </span>
-
-              <button
-                onClick={nextPage}
-                disabled={page >= pagination.totalPages || loading}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
-                title="Next page"
-              >
-                <ChevronRight size={17} />
-              </button>
-
-              <button
-                onClick={() => goToPage(pagination.totalPages)}
-                disabled={page >= pagination.totalPages || loading}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
-                title="Last page"
-              >
-                <ChevronsRight size={17} />
-              </button>
-            </div>
-          </div>
+          <Pagination
+            pagination={{
+              currentPage: pagination.currentPage,
+              totalPages: pagination.totalPages,
+              totalRecords: pagination.totalCustomers,
+              limit: pagination.pageLimit,
+            }}
+            page={page}
+            goToPage={goToPage}
+            isLoading={loading}
+            isFetching={isFiltering}
+          />
         </div>
       </div>
     </div>
