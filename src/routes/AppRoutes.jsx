@@ -7,6 +7,8 @@ import Signup from "../auth/Signup";
 
 // Layout
 import AppLayout from "../layouts/AppLayout";
+// employee pages
+import EmployeeDashboard from "../pages/employee/EmployeeDashboard";
 
 // Customer pages
 import ChangePassword from "../components/ChangePassword";
@@ -20,6 +22,7 @@ import AdminCustomersPage from "../pages/admin/AdminCustomersPage";
 import AdminEmployeesPage from "../pages/admin/AdminEmployeesPage";
 import AdminSettings from "../pages/admin/AdminSettings";
 import Customersettings from "../pages/customers/Settings";
+import AdminAttendanceTable from "../pages/admin/AdminAttendanceTable";
 
 // Routes
 import ProtectedRoute from "../routes/ProtectedRoute";
@@ -58,6 +61,7 @@ export default function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/employee/dashboard" element={<Home />} />
           <Route path="/employee/profile" element={<Profile />} />
+          <Route path="/employee/time-clock" element={<EmployeeDashboard />} />
           <Route
             path="/employee/change-password"
             element={<ChangePassword />}
@@ -77,6 +81,7 @@ export default function AppRoutes() {
           <Route path="/admin/change-password" element={<ChangePassword />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/employees" element={<AdminEmployeesPage />} />
+          <Route path="/admin/attendance-table" element={<AdminAttendanceTable  />} />
           <Route
             path="/admin/customers-list"
             element={<AdminCustomersPage />}

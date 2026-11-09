@@ -54,9 +54,9 @@ export const navigationConfig = {
 
   EMPLOYEE: [
     {
-      id: "dashboard",
+      id: "employee-dashboard",
       label: "Dashboard",
-      path: "/employee/dashboard",
+      path: "/employee/time-clock",
       icon: LayoutDashboard,
       end: true,
     },
@@ -109,7 +109,13 @@ export const navigationConfig = {
       icon: Users,
       end: true,
     },
-    
+    {
+      id: "attendance",
+      label: "Attendance",    
+      path: "/admin/attendance-table",
+      icon: Users,
+      end: true,
+    },
    
     {
       id: "customers",
