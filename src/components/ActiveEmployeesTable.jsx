@@ -149,6 +149,75 @@ const StatusBadge = ({ record }) => {
   );
 };
 
+const AttendanceTableSkeleton = () => (
+  <div
+    aria-busy="true"
+    aria-label="Loading attendance records"
+    className="space-y-6"
+  >
+    <span className="sr-only">Loading attendance records...</span>
+
+    <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+      <div className="space-y-2">
+        <div className="h-6 w-56 animate-pulse rounded bg-gray-200" />
+        <div className="h-4 w-72 max-w-full animate-pulse rounded bg-gray-100" />
+      </div>
+      <div className="h-10 w-24 animate-pulse rounded-lg bg-gray-100" />
+    </div>
+
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {["active", "duty", "break", "off-duty"].map((item) => (
+        <div
+          key={item}
+          className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+        >
+          <div className="h-4 w-32 animate-pulse rounded bg-gray-100" />
+          <div className="mt-3 h-8 w-16 animate-pulse rounded bg-gray-200" />
+        </div>
+      ))}
+    </div>
+
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="flex flex-col gap-3 border-b border-gray-200 p-5 sm:flex-row sm:justify-between">
+        <div className="h-10 w-full animate-pulse rounded-lg bg-gray-100 sm:max-w-sm" />
+        <div className="h-10 w-full animate-pulse rounded-lg bg-gray-100 sm:w-48" />
+      </div>
+      <div className="flex flex-wrap gap-2 border-b border-gray-200 p-5">
+        {["all", "duty", "break", "off-duty"].map((item) => (
+          <div
+            key={item}
+            className="h-9 w-24 animate-pulse rounded-lg bg-gray-100"
+          />
+        ))}
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[1100px] text-left">
+          <thead className="bg-gray-50">
+            <tr>
+              {["employee", "department", "shift", "date", "in", "out", "break", "status"].map((item) => (
+                <th key={item} className="px-5 py-4">
+                  <div className="h-3 w-16 animate-pulse rounded bg-gray-200" />
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {Array.from({ length: 5 }, (_, row) => (
+              <tr key={row}>
+                {Array.from({ length: 8 }, (_, column) => (
+                  <td key={column} className="px-5 py-5">
+                    <div className="h-4 w-20 animate-pulse rounded bg-gray-100" />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+);
+
 const ActiveEmployeesTable = () => {
   const {
     employees,
@@ -231,12 +300,7 @@ const ActiveEmployeesTable = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[300px] items-center justify-center gap-3 text-gray-500">
-        <RefreshCw className="h-5 w-5 animate-spin" />
-        <span className="text-sm">Loading employee attendance...</span>
-      </div>
-    );
+    return <AttendanceTableSkeleton />;
   }
 
   if (error) {

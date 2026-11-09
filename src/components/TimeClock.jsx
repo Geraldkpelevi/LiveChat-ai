@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 
 import { useTimeClock } from "../hooks/useTimeClock";
+import EmployeeDashboardSkeleton from "./EmployeeDashboardSkeleton";
 
 const formatTime = (date) => {
   if (!date) return "--:--";
@@ -121,14 +122,7 @@ const TimeClock = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-75 items-center justify-center">
-        <div className="flex items-center gap-3 text-gray-500">
-          <RefreshCw className="h-5 w-5 animate-spin" />
-          <span className="text-sm">Loading your attendance...</span>
-        </div>
-      </div>
-    );
+    return <EmployeeDashboardSkeleton />;
   }
 
   if (statusError) {
