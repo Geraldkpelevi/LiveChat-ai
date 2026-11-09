@@ -33,3 +33,26 @@ export const attendanceService = {
     };
   },
 };
+
+export const getEmployeeAttendanceHistory = async ({
+  employeeId,
+  page = 1,
+  limit = 10,
+  from,
+  to,
+}) => {
+  const response = await axiosInstance.get("/admin/attendance", {
+    params: {
+      employee: employeeId,
+      page,
+      limit,
+      from,
+      to,
+    },
+  });
+
+  return {
+    records: response.data.data || [],
+    meta: response.data.meta || {},
+  };
+};

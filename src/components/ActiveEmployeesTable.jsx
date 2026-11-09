@@ -10,8 +10,9 @@ import {
   ChevronRight,
   AlertCircle,
   UserRound,
+  Eye,
 } from "lucide-react";
-
+import EmployeeAttendanceDetails from "./EmployeeAttendanceDetails";
 import { useActiveAttendance } from "../hooks/useActiveAttendance";
 
 const ITEMS_PER_PAGE = 10;
@@ -194,7 +195,7 @@ const AttendanceTableSkeleton = () => (
         <table className="w-full min-w-[1100px] text-left">
           <thead className="bg-gray-50">
             <tr>
-              {["employee", "department", "shift", "date", "in", "out", "break", "status"].map((item) => (
+              {["employee", "department", "shift", "date", "in", "out", "break", "status", "action"].map((item) => (
                 <th key={item} className="px-5 py-4">
                   <div className="h-3 w-16 animate-pulse rounded bg-gray-200" />
                 </th>
@@ -204,7 +205,7 @@ const AttendanceTableSkeleton = () => (
           <tbody className="divide-y divide-gray-100">
             {Array.from({ length: 5 }, (_, row) => (
               <tr key={row}>
-                {Array.from({ length: 8 }, (_, column) => (
+                {Array.from({ length: 9 }, (_, column) => (
                   <td key={column} className="px-5 py-5">
                     <div className="h-4 w-20 animate-pulse rounded bg-gray-100" />
                   </td>
@@ -235,6 +236,7 @@ const ActiveEmployeesTable = () => {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [departmentFilter, setDepartmentFilter] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   // Generate department filter options
   const departments = useMemo(() => {
@@ -328,6 +330,7 @@ const ActiveEmployeesTable = () => {
   }
 
   return (
+    <>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
@@ -501,7 +504,7 @@ const ActiveEmployeesTable = () => {
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1100px] text-left">
+          <table className="w-full min-w-275 text-left">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -535,6 +538,9 @@ const ActiveEmployeesTable = () => {
                 <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
                   Status
                 </th>
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">
+                  Action
+                </th>
               </tr>
             </thead>
 
@@ -565,12 +571,12 @@ const ActiveEmployeesTable = () => {
                     </td>
 
                     {/* Department */}
-                    <td className="px-5 py-4 text-sm text-gray-600">
+                    <td className="px-5 py-4 text-sm whitespace-nowrap text-gray-600">
                       {getDepartment(record)}
                     </td>
 
                     {/* Shift */}
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <CalendarClock className="h-4 w-4 text-gray-400" />
                         {getShift(record)}
@@ -578,40 +584,51 @@ const ActiveEmployeesTable = () => {
                     </td>
 
                     {/* Date */}
-                    <td className="px-5 py-4 text-sm text-gray-600">
+                    <td className="px-5 whitespace-nowrap py-4 text-sm text-gray-600">
                       {formatDate(record.clockInTime)}
                     </td>
 
                     {/* Clock In */}
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 whitespace-nowrap">
                       <p className="text-sm font-medium text-gray-800">
                         {formatTime(record.clockInTime)}
                       </p>
                     </td>
 
                     {/* Clock Out */}
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 whitespace-nowrap">
                       <p className="text-sm font-medium text-gray-800">
                         {formatTime(record.clockOutTime)}
                       </p>
                     </td>
 
                     {/* Break Duration */}
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 whitespace-nowrap  ">
                       <p className="text-sm text-gray-600">
                         {formatDuration(getBreakDuration(record))}
                       </p>
                     </td>
 
                     {/* Status */}
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 whitespace-nowrap">
                       <StatusBadge record={record} />
                     </td>
+
+                    <td className="whitespace-nowrap px-5 py-4">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedEmployee(record.employee)}
+                        className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-blue-600 transition hover:border-blue-200 hover:bg-blue-50"
+                      >
+                        <Eye size={16} />
+                       
+                      </button>
+</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={8} className="px-5 py-14 text-center">
+                  <td colSpan={9} className="px-5 py-14 text-center">
                     <Users className="mx-auto h-10 w-10 text-gray-300" />
 
                     <p className="mt-3 text-sm font-medium text-gray-700">
@@ -672,6 +689,13 @@ const ActiveEmployeesTable = () => {
         {isFetching && " Updating attendance..."}
       </p>
     </div>
+      {selectedEmployee && (
+        <EmployeeAttendanceDetails
+          employee={selectedEmployee}
+          onClose={() => setSelectedEmployee(null)}
+        />
+      )}
+    </>
   );
 };
 
