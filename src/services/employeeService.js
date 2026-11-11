@@ -27,6 +27,37 @@ export const getEmployees = async ({ page = 1, limit = 10, status } = {}) => {
   };
 };
 
+export const getAllEmployees = async () => {
+  const limit = 100;
+  const employees = [];
+  let page = 1;
+  let totalPages;
+
+  do {
+    const result = await getEmployees({ page, limit });
+    employees.push(...result.employees);
+
+    const pageCount = Number(result.pagination.totalPages);
+    const totalRecords = Number(result.pagination.totalRecords);
+    const pageLimit = Number(result.pagination.pageLimit);
+
+    totalPages =
+      Number.isFinite(pageCount) && pageCount > 0
+        ? pageCount
+        : Number.isFinite(totalRecords) && totalRecords > 0 && pageLimit > 0
+          ? Math.ceil(totalRecords / pageLimit)
+          : undefined;
+
+    if (totalPages === undefined && result.employees.length < limit) {
+      break;
+    }
+
+    page += 1;
+  } while (totalPages === undefined || page <= totalPages);
+
+  return employees;
+};
+
 // PATCH employee system role
 export const updateEmployeeRole = async (employeeId, role) => {
   const response = await axiosInstance.patch(

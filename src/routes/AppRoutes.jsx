@@ -55,13 +55,27 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
+      {/* ================= SHIFTS ROUTE ================= */}
+
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={["CUSTOMER", "EMPLOYEE", "AGENT", "ADMIN"]}
+          />
+        }
+      >
+        <Route element={<AppLayout />}>
+          <Route path="/employee/time-clock" element={<EmployeeDashboard />} />
+        </Route>
+      </Route>
+
       {/* ================= EMPLOYEE ROUTES ================= */}
 
       <Route element={<ProtectedRoute allowedRoles={["EMPLOYEE"]} />}>
         <Route element={<AppLayout />}>
+          <Route path="/employee/shifts" element={<EmployeeDashboard />} />
           <Route path="/employee/dashboard" element={<Home />} />
           <Route path="/employee/profile" element={<Profile />} />
-          <Route path="/employee/time-clock" element={<EmployeeDashboard />} />
           <Route
             path="/employee/change-password"
             element={<ChangePassword />}

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import useEmployeeAttendanceHistory from "../hooks/useEmployeeAttendanceHistory";
+import formatDuration from "../utils/formatDuration";
 
 const formatDate = (date) => {
   if (!date) return "—";
@@ -32,14 +33,6 @@ const formatTime = (date) => {
     hour: "2-digit",
     minute: "2-digit",
   });
-};
-
-const formatDuration = (minutes = 0) => {
-  const total = Math.max(0, Number(minutes) || 0);
-  const hours = Math.floor(total / 60);
-  const remainingMinutes = total % 60;
-
-  return `${hours}h ${remainingMinutes}m`;
 };
 
 const getStatusStyle = (status) => {
@@ -346,11 +339,9 @@ const EmployeeAttendanceDetails = ({ employee, onClose }) => {
                                   ? formatDuration(breakRecord.durationMinutes)
                                   : breakRecord.startTime && breakRecord.endTime
                                     ? formatDuration(
-                                        Math.round(
-                                          (new Date(breakRecord.endTime) -
-                                            new Date(breakRecord.startTime)) /
-                                            60000
-                                        )
+                                        (new Date(breakRecord.endTime) -
+                                          new Date(breakRecord.startTime)) /
+                                          60000
                                       )
                                     : "In progress"}
                               </span>

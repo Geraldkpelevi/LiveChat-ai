@@ -15,6 +15,7 @@ import { useState } from "react";
 
 import { useTimeClock } from "../hooks/useTimeClock";
 import EmployeeDashboardSkeleton from "./EmployeeDashboardSkeleton";
+import formatDuration from "../utils/formatDuration";
 
 const formatTime = (date) => {
   if (!date) return "--:--";
@@ -25,17 +26,19 @@ const formatTime = (date) => {
   });
 };
 
-const formatDuration = (minutes = 0) => {
-  const totalMinutes = Number(minutes) || 0;
-  const hours = Math.floor(totalMinutes / 60);
-  const remainingMinutes = totalMinutes % 60;
-
-  return `${hours}h ${remainingMinutes}m`;
-};
-
 const formatWorkTime = (value) => {
-  if (typeof value === "string" && value.includes(".")) {
-    return value;
+  if (typeof value === "string") {
+    const formattedDuration = value.match(
+      /^(\d+)h(?:\.(\d+)m)?(?:\.(\d+)s)?$/,
+    );
+
+    if (formattedDuration) {
+      const [, hours, minutes = "0", seconds = "0"] = formattedDuration;
+
+      return formatDuration(
+        Number(hours) * 60 + Number(minutes) + Number(seconds) / 60,
+      );
+    }
   }
 
   return formatDuration(value);

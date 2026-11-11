@@ -28,6 +28,7 @@ export const navigationConfig = {
       icon: LayoutDashboard,
       end: true,
     },
+    
     {
       id: "messages",
       label: "Messages",
@@ -55,8 +56,8 @@ export const navigationConfig = {
   EMPLOYEE: [
     {
       id: "employee-dashboard",
-      label: "Dashboard",
-      path: "/employee/time-clock",
+      label: "Shifts",
+      path: "/employee/shifts",
       icon: LayoutDashboard,
       end: true,
     },
@@ -67,6 +68,13 @@ export const navigationConfig = {
       id: "dashboard",
       label: "Dashboard",
       path: "/agent/dashboard",
+      icon: LayoutDashboard,
+      end: true,
+    },
+    {
+      id: "shifts",
+      label: "Shifts",
+      path: "/agent/Shifts",
       icon: LayoutDashboard,
       end: true,
     },
@@ -116,6 +124,7 @@ export const navigationConfig = {
       icon: Users,
       end: true,
     },
+    
    
     {
       id: "customers",

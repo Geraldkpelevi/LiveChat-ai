@@ -5,7 +5,7 @@ import AuthSkeleton from "../components/AuthSkeleton";
 
 const roleRedirects = {
   CUSTOMER: "/dashboard",
-  EMPLOYEE: "/employee/dashboard",
+  EMPLOYEE: "/employee/shifts",
   AGENT: "/agent/dashboard",
   ADMIN: "/admin/dashboard",
 };

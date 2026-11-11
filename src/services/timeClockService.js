@@ -50,13 +50,30 @@ export const timeClockService = {
     return getResponseData(response);
   },
 
-  // Assign or remove an employee shift
-assignShift: async (employeeId, shiftId) => {
-  const response = await axiosInstance.patch(
-    `/admin/employees/${employeeId}/shift`,
-    { shiftId },
-  );
+  adminClockIn: async (employeeId) => {
+    const response = await axiosInstance.post(
+      `/admin/employees/${employeeId}/clock-in`,
+      { source: getDeviceSource() },
+    );
 
-  return response.data.data;
-},
+    return getResponseData(response);
+  },
+
+  adminClockOut: async (employeeId) => {
+    const response = await axiosInstance.post(
+      `/admin/employees/${employeeId}/clock-out`,
+      { source: getDeviceSource() },
+    );
+
+    return getResponseData(response);
+  },
+
+  assignShift: async (employeeId, shiftId) => {
+    const response = await axiosInstance.patch(
+      `/admin/employees/${employeeId}/shift`,
+      { shiftId },
+    );
+
+    return getResponseData(response);
+  },
 };
