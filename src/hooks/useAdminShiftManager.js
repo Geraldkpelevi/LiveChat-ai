@@ -22,8 +22,10 @@ export const useAdminShiftManager = (attendanceRecords = []) => {
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [shiftIds, setShiftIds] = useState({});
   const [message, setMessage] = useState(null);
+  const [clockingEmployeeId, setClockingEmployeeId] = useState(null);
 
   const {
     clockIn,
@@ -53,8 +55,27 @@ export const useAdminShiftManager = (attendanceRecords = []) => {
 
   // Filter employees
   const filteredEmployees = useMemo(
-    () => filterEmployees(employees, search),
-    [employees, search],
+    () =>
+      filterEmployees(employees, search).filter((employee) => {
+        const attendance = attendanceByEmployee.get(
+          String(getEmployeeId(employee)),
+        );
+
+        if (statusFilter === "ON_DUTY") {
+          return attendance?.status === "ON_DUTY";
+        }
+
+        if (statusFilter === "ON_BREAK") {
+          return attendance?.status === "ON_BREAK";
+        }
+
+        if (statusFilter === "OFF_DUTY") {
+          return !["ON_DUTY", "ON_BREAK"].includes(attendance?.status);
+        }
+
+        return true;
+      }),
+    [employees, search, statusFilter, attendanceByEmployee],
   );
 
   // Clear a temporary shift input
@@ -92,21 +113,26 @@ export const useAdminShiftManager = (attendanceRecords = []) => {
   // Clock in / clock out
   const handleClockToggle = async (employee, isOnShift) => {
     const employeeId = getEmployeeId(employee);
+    setClockingEmployeeId(String(employeeId));
 
-    const success = await runAction(
-      () =>
-        isOnShift
-          ? clockOut(employeeId)
-          : clockIn(employeeId),
-      `${getEmployeeName(employee)} was ${
-        isOnShift ? "clocked out" : "clocked in"
-      }.`,
-    );
+    try {
+      const success = await runAction(
+        () =>
+          isOnShift
+            ? clockOut(employeeId)
+            : clockIn(employeeId),
+        `${getEmployeeName(employee)} was ${
+          isOnShift ? "clocked out" : "clocked in"
+        }.`,
+      );
 
-    if (success) {
-      await queryClient.invalidateQueries({
-        queryKey: ADMIN_SHIFT_MANAGER_QUERY_KEY,
-      });
+      if (success) {
+        await queryClient.invalidateQueries({
+          queryKey: ADMIN_SHIFT_MANAGER_QUERY_KEY,
+        });
+      }
+    } finally {
+      setClockingEmployeeId(null);
     }
   };
 
@@ -180,6 +206,8 @@ export const useAdminShiftManager = (attendanceRecords = []) => {
     // Search
     search,
     setSearch,
+    statusFilter,
+    setStatusFilter,
 
     // Shift inputs
     shiftIds,
@@ -197,6 +225,7 @@ export const useAdminShiftManager = (attendanceRecords = []) => {
 
     // Mutation state
     isPending,
+    clockingEmployeeId,
 
     // Actions
     handleClockToggle,

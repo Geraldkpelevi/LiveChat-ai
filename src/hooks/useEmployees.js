@@ -4,6 +4,7 @@ import {
   registerEmployee,
   deleteEmployee,
   getEmployees,
+  getAllEmployees,
   updateEmployeeRole,
   updateEmployeeStatus,
 } from "../services/employeeService";
@@ -46,6 +47,25 @@ export const useEmployees = ({ page = 1, limit = 10, status = "" } = {}) => {
     queryKey: [...employeeKeys.lists(), { page, limit, status }],
     queryFn: () => getEmployees({ page, limit, status }),
     placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useAllEmployees = () => {
+  return useQuery({
+    queryKey: [...employeeKeys.all, "all"],
+    queryFn: getAllEmployees,
+  });
+};
+
+export const useCreateEmployee = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: registerEmployee,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: employeeKeys.all,
+      }),
   });
 };
 

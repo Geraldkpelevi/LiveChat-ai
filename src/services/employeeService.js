@@ -10,6 +10,7 @@ export const registerEmployee = async (employeeData) => {
 
   return response.data;
 };
+
 // GET paginated employees
 export const getEmployees = async ({ page = 1, limit = 10, status } = {}) => {
   const params = { page, limit };

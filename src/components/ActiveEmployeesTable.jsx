@@ -8,6 +8,7 @@ import {
   Eye,
   RefreshCw,
   Search,
+  Timer,
   UserRound,
   Users,
 } from "lucide-react";
@@ -82,6 +83,33 @@ const getBreakDuration = (record) => {
   );
 
   return completedBreaks + currentBreakMinutes;
+};
+
+const getWorkDuration = (record) => {
+  const recordedMinutes = Number(record.totalWorkedMinutes);
+
+  if (
+    record.totalWorkedMinutes != null &&
+    Number.isFinite(recordedMinutes)
+  ) {
+    return Math.max(0, recordedMinutes);
+  }
+
+  if (!record.clockInTime) return 0;
+
+  const clockInTime = new Date(record.clockInTime).getTime();
+  const clockOutTime = record.clockOutTime
+    ? new Date(record.clockOutTime).getTime()
+    : Date.now();
+
+  if (!Number.isFinite(clockInTime) || !Number.isFinite(clockOutTime)) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    (clockOutTime - clockInTime) / 60000 - getBreakDuration(record),
+  );
 };
 
 const isOffDuty = (record) =>
@@ -166,7 +194,7 @@ const AttendanceTableSkeleton = () => (
         ))}
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-275 text-left">
+        <table className="w-full min-w-[1200px] text-left">
           <thead className="bg-gray-50">
             <tr>
               {[
@@ -507,6 +535,10 @@ const ActiveEmployeesTable = () => {
                   </th>
 
                   <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    Work Duration
+                  </th>
+
+                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     Break Duration
                   </th>
 
@@ -577,6 +609,14 @@ const ActiveEmployeesTable = () => {
                         </p>
                       </td>
 
+                      {/* Work Duration */}
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Timer className="h-4 w-4 text-gray-400" />
+                          {formatDuration(getWorkDuration(record))}
+                        </div>
+                      </td>
+
                       {/* Break Duration */}
                       <td className="px-5 py-4 whitespace-nowrap  ">
                         <p className="text-sm text-gray-600">
@@ -602,7 +642,7 @@ const ActiveEmployeesTable = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={9} className="px-5 py-14 text-center">
+                    <td colSpan={10} className="px-5 py-14 text-center">
                       <Users className="mx-auto h-10 w-10 text-gray-300" />
 
                       <p className="mt-3 text-sm font-medium text-gray-700">

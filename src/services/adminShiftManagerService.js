@@ -66,7 +66,9 @@ export const filterEmployees = (employees = [], search = "") => {
       getEmployeeName(employee),
       employee?.user?.email,
       employee?.employeeNumber,
+      employee?.department,
       getEmployeeRole(employee),
+      getEmployeeShift(employee)?.name,
     ]
       .filter(Boolean)
       .some((value) =>
